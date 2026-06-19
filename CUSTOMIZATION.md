@@ -73,6 +73,56 @@ source; but, the above method of writing custom functions for `config.h` is
 preferred as it can enable better compatibility between patches or with future
 versions of nsxiv, and requires less maintenance by the user.
 
+### Example of applying a patch
+
+Clone the `nsxiv` and `nsxiv-extra` repositories:
+
+```bash
+git clone https://codeberg.org/nsxiv/nsxiv.git
+git clone https://codeberg.org/nsxiv/nsxiv-extra.git
+```
+
+Create a new branch (optional).
+
+```bash
+cd nsxiv \
+  && git checkout -b my_branch
+```
+
+Optionally, you can symlink `config.h` to `config.def.h` so that it's tracked by
+git and kept in sync.
+
+```bash
+ln -s config.def.h config.h
+```
+
+Apply a patch compatible with newest `nsxiv` version.
+As an example we'll use the [random-image](patches/random-image) patch.
+
+```bash
+git apply ../nsxiv-extra/patches/random-image/random-image-v33.patch
+git commit -am "apply patch random-image"
+```
+
+For `.patch` files, it's better to use `git am` as it will preserve the commit
+message, author details etc.
+
+```bash
+git am ../nsxiv-extra/patches/random-image/random-image-v33.patch
+```
+
+Now compile and run nsxiv.
+If the patch was applied correctly, then pressing `Ctrl+R` should take you to a
+random image.
+
+```bash
+make
+./nsxiv ~/pictures
+```
+
+If you are happy with the changes, you can now merge your test branch into your
+master branch.
+
 ## Making your config forward compatible
 
 If you want to only specify changes from the default in your config and make

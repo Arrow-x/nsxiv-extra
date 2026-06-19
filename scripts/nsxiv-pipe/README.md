@@ -1,18 +1,31 @@
 # nsxiv-pipe
 
 This script allows piping images into `nsxiv` via draining the pipe into a temp
-file. The reason for this is because `Imlib2` (the image library nsxiv uses)
-cannot read from pipes
-([#296](https://codeberg.org/nsxiv/nsxiv/issues/296)).
+file. The temporary file will be automatically cleaned up on exit.
 `$TMPDIR` is respected if set.
 
 Example usage:
 
-```sh
-curl 'https://link.to/image' | nsxiv-pipe
-
-nsxiv-pipe < /path/to/image.png
+```console
+$ curl 'https://link.to/image' | nsxiv-pipe
+$ nsxiv-pipe < /path/to/image.png
 ```
+
+## zsh users
+
+For zsh users, `nsxiv-pipe` is pretty pointless because zsh supports creating
+tmpfiles via process substitution. Examples using
+[sxot](https://codeberg.org/NRK/sxot) to take screenshot and
+[curl](https://curl.se) to download an image:
+
+```console
+$ nsxiv =(sxot)
+$ nsxiv =(curl 'https://codeberg.org/nsxiv/pages/raw/branch/master/img/logo.png')
+$ nsxiv =(sxot) =(curl ...)    # works for multiple pipes too
+```
+
+Bash and many other shells do not have any such feature.
+Which is what `nsxiv-pipe` is supposed to tackle.
 
 # Authors
 
